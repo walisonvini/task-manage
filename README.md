@@ -61,3 +61,17 @@ http://localhost:8080
 # Abra seu navegador e navegue para:
 http://localhost:8000/api/documentation
 ```
+
+## ✅ Executando Testes
+
+1. Execute todos os testes:
+
+```bash
+./vendor/bin/phpunit
+```
+
+2. (Opcional) Para executar um teste específico:
+
+```bash
+./vendor/bin/phpunit --filter=nome_do_metodo_teste
+```
