@@ -12,8 +12,14 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        \App\Events\ExampleEvent::class => [
-            \App\Listeners\ExampleListener::class,
+        \App\Events\Tasks\TaskCreated::class => [
+            \App\Listeners\Tasks\LogTaskCreated::class,
+        ],
+        \App\Events\Tasks\TaskUpdated::class => [
+            \App\Listeners\Tasks\LogTaskUpdated::class,
+        ],
+        \App\Events\Tasks\TaskDeleted::class => [
+            \App\Listeners\Tasks\LogTaskDeleted::class,
         ],
     ];
 

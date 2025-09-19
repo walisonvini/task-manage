@@ -8,15 +8,13 @@ use App\Enums\TaskStatus;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\Collection;
-use Carbon\Carbon;
 
-use App\Services\LogService;
+use App\Events\Tasks\TaskCreated;
+use App\Events\Tasks\TaskUpdated;
+use App\Events\Tasks\TaskDeleted;
 
 class TaskServices
 {
-    public function __construct(
-        private LogService $logService
-    ) {}
 
     public function all(array $filters = []) : Collection
     {
@@ -42,13 +40,7 @@ class TaskServices
 
         $task = Task::create($data);
 
-        $this->logService->create([
-            'action' => 'Create task ' . $task->title,
-            'model' => 'Task',
-            'model_id' => $task->id,
-            'data' => $data,
-            'created_at' => Carbon::now(),
-        ]);
+        event(new TaskCreated($task, $data));
 
         return $task;
     }
@@ -66,32 +58,23 @@ class TaskServices
         }
 
         $task = Task::findOrFail($id);
+        $oldData = $task->toArray();
 
-        $this->logService->create([
-            'action' => 'Update task ' . $task->title,
-            'model' => 'Task',
-            'model_id' => $task->id,
-            'data' => [
-                'old' => $task->toArray(),
-                'new' => $data,
-            ],
-            'created_at' => Carbon::now(),
-        ]);
+        $result = $task->update($data);
 
-        return $task->update($data);
+        event(new TaskUpdated($task, $oldData, $data));
+
+        return $result;
     }
 
     public function delete(int $id): Task | bool
     {
         $task = Task::findOrFail($id);
 
-        $this->logService->create([
-            'action' => 'Delete task ' . $task->title,
-            'model' => 'Task',
-            'model_id' => $task->id,
-            'created_at' => Carbon::now(),
-        ]);
+        $result = $task->delete();
 
-        return $task->delete();
+        event(new TaskDeleted($task));
+
+        return $result;
     }
 }
