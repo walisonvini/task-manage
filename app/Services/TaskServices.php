@@ -71,7 +71,10 @@ class TaskServices
             'action' => 'Update task ' . $task->title,
             'model' => 'Task',
             'model_id' => $task->id,
-            'data' => $data,
+            'data' => [
+                'old' => $task->toArray(),
+                'new' => $data,
+            ],
             'created_at' => Carbon::now(),
         ]);
 
