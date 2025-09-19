@@ -9,8 +9,12 @@ use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
+use App\Traits\ApiResponse;
+
 class Handler extends ExceptionHandler
 {
+    use ApiResponse;
+
     /**
      * A list of the exception types that should not be reported.
      *
@@ -49,6 +53,18 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof ValidationException) {
+            return $this->errorResponse('Validation failed', 422, $exception->errors());
+        }
+
+        if ($exception instanceof ModelNotFoundException) {
+            return $this->errorResponse('Resource not found', 404);
+        }
+
+        if ($exception instanceof \Exception) {
+            return $this->errorResponse($exception->getMessage(), $exception->getCode());
+        }
+
         return parent::render($request, $exception);
     }
 }
