@@ -4,11 +4,14 @@ namespace App\Models;
 
 use App\Enums\TaskStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class Task extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['title', 'description', 'status'];
 
     protected $casts = [
