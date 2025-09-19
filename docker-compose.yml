@@ -9,13 +9,10 @@ services:
       - .:/var/www
     ports:
       - "8000:8000"
+    user: "${UID:-1000}:${GID:-1000}"
     depends_on:
       - mysql
       - mongo
-    user: "${UID:-1000}:${GID:-1000}"
-    environment:
-      - USER_ID=${UID:-1000}
-      - GROUP_ID=${GID:-1000}
 
   mysql:
     image: mysql:8.0
