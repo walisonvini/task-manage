@@ -24,10 +24,13 @@ $app = new Laravel\Lumen\Application(
 );
 
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+$app->register(MongoDB\Laravel\MongoDBServiceProvider::class);
 
 $app->withFacades();
 
 $app->withEloquent();
+
+$app->configure('database');
 
 /*
 |--------------------------------------------------------------------------

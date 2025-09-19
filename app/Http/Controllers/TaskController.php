@@ -38,18 +38,18 @@ class TaskController extends Controller
     public function store(Request $request): JsonResponse
     {
         $task = $this->taskServices->create($request->all());
-        return $this->successResponse($task, 'Task created successfully');
+        return $this->successResponse($task, 'Task created successfully', 201);
     }
 
     public function update(Request $request, int $id): JsonResponse
     {
         $this->taskServices->update($request->all(), $id);
-        return $this->successResponse( null, 'Task updated successfully');
+        return $this->successResponse( [], 'Task updated successfully');
     }
 
     public function destroy(int $id): JsonResponse
     {
         $this->taskServices->delete($id);
-        return $this->successResponse( null, 'Task deleted successfully');
+        return $this->successResponse( [], 'Task deleted successfully');
     }
 }

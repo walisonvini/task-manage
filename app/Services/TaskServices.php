@@ -8,9 +8,16 @@ use App\Enums\TaskStatus;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\Collection;
+use Carbon\Carbon;
+
+use App\Services\LogService;
 
 class TaskServices
 {
+    public function __construct(
+        private LogService $logService
+    ) {}
+
     public function all(array $filters = []) : Collection
     {
         return Task::filter($filters)->get();
@@ -21,7 +28,7 @@ class TaskServices
        return Task::findOrFail($id);
     }
 
-    public function create(array $data)
+    public function create(array $data): Task
     {
         $validator = Validator::make($data, [
             'title' => 'required|string|max:255',
@@ -33,10 +40,20 @@ class TaskServices
             throw new ValidationException($validator);
         }
 
-        return Task::create($data);
+        $task = Task::create($data);
+
+        $this->logService->create([
+            'action' => 'Create task ' . $task->title,
+            'model' => 'Task',
+            'model_id' => $task->id,
+            'data' => $data,
+            'created_at' => Carbon::now(),
+        ]);
+
+        return $task;
     }
 
-    public function update(array $data, int $id)
+    public function update(array $data, int $id): Task | bool
     {
         $validator = Validator::make($data, [
             'title' => 'sometimes|string|max:255',
@@ -48,11 +65,30 @@ class TaskServices
             throw new ValidationException($validator);
         }
 
-        return Task::findOrFail($id)->update($data);
+        $task = Task::findOrFail($id);
+
+        $this->logService->create([
+            'action' => 'Update task ' . $task->title,
+            'model' => 'Task',
+            'model_id' => $task->id,
+            'data' => $data,
+            'created_at' => Carbon::now(),
+        ]);
+
+        return $task->update($data);
     }
 
-    public function delete(int $id)
+    public function delete(int $id): Task | bool
     {
-        return Task::findOrFail($id)->delete();
+        $task = Task::findOrFail($id);
+
+        $this->logService->create([
+            'action' => 'Delete task ' . $task->title,
+            'model' => 'Task',
+            'model_id' => $task->id,
+            'created_at' => Carbon::now(),
+        ]);
+
+        return $task->delete();
     }
 }

@@ -62,7 +62,8 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof \Exception) {
-            return $this->errorResponse($exception->getMessage(), $exception->getCode());
+            $code = $exception->getCode() == 0 ? 500 : $exception->getCode();
+            return $this->errorResponse($exception->getMessage(), $code);
         }
 
         return parent::render($request, $exception);
