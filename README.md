@@ -1,26 +1,63 @@
-# Lumen PHP Framework
+# Task Manager
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/lumen)](https://packagist.org/packages/laravel/lumen-framework)
+## Descrição
+API backend para gerenciamento de tarefas, com suporte a filtros por status e registro de logs em banco não-relacional.
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## 💻 Pré-requisitos
+* **Docker** `^24.0`
+* **Docker Compose** `^2.0`
 
-> **Note:** In the years since releasing Lumen, PHP has made a variety of wonderful performance improvements. For this reason, along with the availability of [Laravel Octane](https://laravel.com/docs/octane), we no longer recommend that you begin new projects with Lumen. Instead, we recommend always beginning new projects with [Laravel](https://laravel.com).
+## 🐋 Instalação
 
-## Official Documentation
+1. Copie o arquivo .env
+```bash
+cp .env.example .env
+```
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+2. Instalar dependências PHP
+```bash
+#Não é necessário ter PHP instalado localmente, pois o comando roda dentro de um container Docker.
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -w /var/www/html \
+    laravelsail/php84-composer \
+    composer install
+```
 
-## Contributing
+3. Construa as imagens Docker
+```bash
+docker compose build
+```
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. Inicie os containers
+```bash
+docker compose up -d
+```
 
-## Security Vulnerabilities
+5. Acesse o container da aplicação
+```bash
+docker exec -it task-manager-app bash
+```
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+6. Gere a chave do Laravel
+```bash
+php artisan key:generate
+```
 
-## License
+7. Execute as migrações
+```bash
+php artisan migrate
+```
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+8. Acesse a aplicação
+```bash
+# Abra seu navegador e navegue para:
+http://localhost:8080
+```
+
+9. Acesse a documentação
+```bash
+# Abra seu navegador e navegue para:
+http://localhost:8000/api/documentation
+```
