@@ -25,6 +25,7 @@ $app = new Laravel\Lumen\Application(
 
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(MongoDB\Laravel\MongoDBServiceProvider::class);
+$app->register(\SwaggerLume\ServiceProvider::class);
 
 $app->withFacades();
 
@@ -44,6 +45,8 @@ $app->configure('database');
 | your own bindings here if you like or you can make another file.
 |
 */
+
+$app->configure('swagger-lume');
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
