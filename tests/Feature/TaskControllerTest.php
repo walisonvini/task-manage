@@ -10,9 +10,25 @@ use Tests\TestCase;
 use App\Models\Task;
 use App\Models\Log;
 
+use Illuminate\Support\Facades\DB;
+
 class TaskControllerTest extends TestCase
 {
     use DatabaseMigrations;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        DB::connection('mongodb')->table('logs')->delete();
+    }
+
+    protected function tearDown(): void
+    {
+        DB::connection('mongodb')->table('logs')->delete();
+
+        parent::tearDown();
+    }
 
     public function test_can_get_all_tasks()
     {
