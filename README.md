@@ -22,7 +22,7 @@ docker run --rm \
     -v $(pwd):/var/www/html \
     -w /var/www/html \
     laravelsail/php84-composer \
-    composer install
+    composer install --ignore-platform-req=ext-mongodb
 ```
 
 3. Construa as imagens Docker
@@ -42,21 +42,26 @@ docker exec -it task-manager-app bash
 
 6. Gere a chave do Laravel
 ```bash
+composer install
+```
+
+7. Gere a chave do Laravel
+```bash
 php artisan key:generate
 ```
 
-7. Execute as migrações
+8. Execute as migrações
 ```bash
 php artisan migrate
 ```
 
-8. Acesse a aplicação
+9. Acesse a aplicação
 ```bash
 # Abra seu navegador e navegue para:
 http://localhost:8080
 ```
 
-9. Acesse a documentação
+10. Acesse a documentação
 ```bash
 # Abra seu navegador e navegue para:
 http://localhost:8000/api/documentation
